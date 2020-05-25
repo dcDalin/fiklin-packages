@@ -1,0 +1,20 @@
+{
+  "name": "fiklin",
+  "version": "1.0.0",
+  "description": "this is going to be da bomb",
+  "main": "index.js",
+  "author": "givehug",
+  "license": "ISC",
+  "scripts": {
+    "build": "yarn workspace @fiklin/client run build",
+    "start": "yarn workspace @fiklin/server run start",
+    "dev": "export $(cat .env | xargs) && yarn workspace @fiklin/server run dev"
+  },
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "engines": {
+    "node": "14.x"
+  }
+}
