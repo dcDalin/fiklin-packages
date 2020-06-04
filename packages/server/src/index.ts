@@ -41,6 +41,7 @@ const { PORT, NODE_ENV } = process.env;
       console.log(
         `
       ################################################
+      🚀 Client ready at http://localhost:${PORT} 🚀
       🚀 Server ready at http://localhost:${PORT}${server.graphqlPath} 🚀
       ################################################
       `,
