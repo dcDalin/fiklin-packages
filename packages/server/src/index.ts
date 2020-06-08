@@ -1,12 +1,10 @@
-import { createServer } from 'http';
 import express from 'express';
-import { ApolloServer } from 'apollo-server-express';
-
+import cors from 'cors';
+import bodyParser from 'body-parser';
 import client from '@fiklin/client';
-import typeDefs from './typeDefs';
-import resolvers from './resolvers';
+import hello from './routes/hello';
 
-const { PORT, NODE_ENV } = process.env;
+const { PORT } = process.env;
 
 (async () => {
   try {
@@ -14,42 +12,37 @@ const { PORT, NODE_ENV } = process.env;
 
     app.disable('x-powered-by');
 
-    const server = new ApolloServer({
-      typeDefs,
-      resolvers,
-      context: async ({ req, res, connection }) => {
-        if (connection) {
-          // check connection for metadata
-          return connection.context;
-        }
-        return { req, res };
-      },
-      introspection: true,
-      playground: NODE_ENV !== 'production',
-    });
+    app.use(
+      cors({
+        credentials: true,
+        origin: '*',
+      }),
+    );
 
-    server.applyMiddleware({ app, cors: false });
+    app.use(bodyParser.json());
 
-    const httpServer = createServer(app);
+    // Routes
+    app.use('/hello', hello);
 
-    server.installSubscriptionHandlers(httpServer);
-
+    // Bootstrap client app
     await bootstrapClientApp(app);
 
-    httpServer.listen({ port: PORT }, () =>
+    // Listen
+    app.listen({ port: PORT }, () =>
       // tslint:disable-next-line: no-console
       console.log(
         `
-      ################################################
-      🚀 Client ready at http://localhost:${PORT} 🚀
-      🚀 Server ready at http://localhost:${PORT}${server.graphqlPath} 🚀
-      ################################################
-      `,
+        ################################################
+
+        🚀 Server ready at http://localhost:${PORT} 🚀
+
+        ################################################
+        `,
       ),
     );
-  } catch (e) {
+  } catch (error) {
     // tslint:disable-next-line: no-console
-    console.error(e);
+    console.error(error);
   }
 })();
 
