@@ -6,9 +6,9 @@ import { withApollo } from "../apollo/apollo";
 import { Button } from "@material-ui/core";
 
 const QUERY = gql`
-  query hello {
-    hello {
-      message
+  query getUser {
+    user {
+      name
     }
   }
 `;
@@ -22,7 +22,7 @@ const NOSSR = () => {
   return (
     <Layout>
       <h1>This should be rendered on client side</h1>
-      <pre>Data: {data.hello.message}</pre>
+      <pre>Data: {data.user.name}</pre>
       <Button color="primary" onClick={() => refetch()}>
         Hello World
       </Button>

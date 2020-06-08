@@ -1,10 +1,17 @@
+import 'dotenv/config';
+import { createServer } from 'http';
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import { ApolloServer } from 'apollo-server-express';
 import client from '@fiklin/client';
-import hello from './routes/hello';
+import typeDefs from './typeDefs';
+import resolvers from './resolvers';
+import env from './env';
 
-const { PORT } = process.env;
+// Env vars
+const PORT = env('PORT');
+const NODE_ENV = env('NODE_ENV');
 
 (async () => {
   try {
@@ -21,21 +28,38 @@ const { PORT } = process.env;
 
     app.use(bodyParser.json());
 
-    // Routes
-    app.use('/hello', hello);
+    const server = new ApolloServer({
+      typeDefs,
+      resolvers,
+      context: async ({ req, res, connection }) => {
+        if (connection) {
+          // check connection for metadata
+          return connection.context;
+        }
+        return { req, res };
+      },
+      introspection: true,
+      playground: NODE_ENV !== 'production',
+    });
+
+    server.applyMiddleware({ app, cors: false });
+
+    const httpServer = createServer(app);
+
+    server.installSubscriptionHandlers(httpServer);
 
     // Bootstrap client app
     await bootstrapClientApp(app);
 
     // Listen
-    app.listen({ port: PORT }, () =>
+    httpServer.listen({ port: PORT }, () =>
       // tslint:disable-next-line: no-console
       console.log(
         `
         ################################################
+        🚀 Client ready at http://localhost:${PORT} 🚀
 
-        🚀 Server ready at http://localhost:${PORT} 🚀
-
+        🚀 Server ready at http://localhost:${PORT}${server.graphqlPath} 🚀
         ################################################
         `,
       ),

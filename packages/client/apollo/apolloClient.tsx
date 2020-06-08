@@ -7,7 +7,7 @@ export default function createApolloClient(initialState, ctx) {
   return new ApolloClient({
     ssrMode: Boolean(ctx),
     link: new HttpLink({
-      uri: "https://fiklin-hasura-dev.herokuapp.com/v1/graphql", // must be absolute
+      uri: process.env.GRAPHQL_URI, // must be absolute
       credentials: "same-origin",
       fetch,
     }),
