@@ -1,9 +1,8 @@
 import express from 'express';
+import hello from '../actions/hello';
 
 const helloRouter = express.Router();
 
-helloRouter.get('/', (req, res) => {
-  res.send('Hello');
-});
+helloRouter.post('/', hello);
 
 export default helloRouter;
