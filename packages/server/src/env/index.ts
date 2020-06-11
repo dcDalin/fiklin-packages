@@ -1,6 +1,6 @@
 const cache: { [key: string]: any } = {};
 
-const accessEnv = (key: string, defaultValue?: any) => {
+const env = (key: string, defaultValue?: any) => {
   if (!(key in process.env)) {
     if (defaultValue) return defaultValue;
     throw new Error(`${key} not found in process.env!`);
@@ -13,4 +13,4 @@ const accessEnv = (key: string, defaultValue?: any) => {
   return process.env[key];
 };
 
-export default accessEnv;
+export default env;

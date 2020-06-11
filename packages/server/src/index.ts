@@ -1,10 +1,12 @@
 import 'dotenv/config';
+import path from 'path';
 import { createServer } from 'http';
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import { ApolloServer } from 'apollo-server-express';
 import client from '@fiklin/client';
+import db from './db';
 import typeDefs from './typeDefs';
 import resolvers from './resolvers';
 import env from './env';
@@ -47,6 +49,9 @@ const NODE_ENV = env('NODE_ENV');
     const httpServer = createServer(app);
 
     server.installSubscriptionHandlers(httpServer);
+
+    // authenticate our sequelize
+    await db.authenticate();
 
     // Bootstrap client app
     await bootstrapClientApp(app);
