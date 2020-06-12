@@ -5,6 +5,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
+import { UserProvider, useFetchUser } from "../utils/user";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,8 +22,9 @@ const useStyles = makeStyles((theme) => ({
 
 const Layout = (props) => {
   const classes = useStyles();
+  const { user, loading } = useFetchUser();
   return (
-    <>
+    <UserProvider value={{ user, loading }}>
       <AppBar position="static">
         <Toolbar>
           <IconButton
@@ -45,7 +47,7 @@ const Layout = (props) => {
       </AppBar>
 
       {props.children}
-    </>
+    </UserProvider>
   );
 };
 

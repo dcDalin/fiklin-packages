@@ -1,5 +1,4 @@
 import 'dotenv/config';
-import path from 'path';
 import { createServer } from 'http';
 import express from 'express';
 import cors from 'cors';
@@ -7,8 +6,9 @@ import bodyParser from 'body-parser';
 import { ApolloServer } from 'apollo-server-express';
 import client from '@fiklin/client';
 import db from './db';
-import typeDefs from './typeDefs';
-import resolvers from './resolvers';
+import authRouter from './routes/auth/auth.router';
+import typeDefs from './graphql/typeDefs';
+import resolvers from './graphql/resolvers';
 import env from './env';
 
 // Env vars
@@ -29,6 +29,9 @@ const NODE_ENV = env('NODE_ENV');
     );
 
     app.use(bodyParser.json());
+
+    // routes
+    app.use('/auth', authRouter);
 
     const server = new ApolloServer({
       typeDefs,
