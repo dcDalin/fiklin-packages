@@ -6,12 +6,29 @@ module.exports = {
       {
         id: {
           allowNull: false,
-          autoIncrement: true,
           primaryKey: true,
-          type: Sequelize.INTEGER,
+          type: Sequelize.UUID,
         },
-        name: {
+        firstName: {
+          allowNull: true,
+          type: Sequelize.STRING,
+        },
+        lastName: {
+          allowNull: true,
+          type: Sequelize.STRING,
+        },
+        userName: {
+          allowNull: true,
+          type: Sequelize.STRING,
+          unique: true,
+        },
+        email: {
           allowNull: false,
+          type: Sequelize.STRING,
+          unique: true,
+        },
+        password: {
+          allowNull: true,
           type: Sequelize.STRING,
         },
         createdAt: {
