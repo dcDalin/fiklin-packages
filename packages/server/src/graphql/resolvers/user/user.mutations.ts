@@ -1,7 +1,7 @@
 import bcryptjs from 'bcryptjs';
 import userModel from '../../../models/user.model';
 import validateSignUp from './validations/validateSignUp';
-import { success, failure } from '../../constants/status';
+import { SUCCESS, FAILURE } from '../../constants/status';
 import { generateToken } from '../../../utils/generateToken';
 
 interface SignUpArgs {
@@ -24,7 +24,7 @@ export default {
         // if validation fails i.e value of validate is not null
         if (validate) {
           return {
-            status: failure,
+            status: FAILURE,
             message: validate,
           };
         }
@@ -45,12 +45,12 @@ export default {
           // generate token
           const token = generateToken(res);
           return {
-            status: success,
+            status: SUCCESS,
             message: token,
           };
         }
         return {
-          status: failure,
+          status: FAILURE,
           message: 'Could not create account, please try again later.',
         };
       } catch (error) {
