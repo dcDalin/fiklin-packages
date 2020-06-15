@@ -1,21 +1,62 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import {
+  Column,
+  DataType,
+  Model,
+  Table,
+  BeforeCreate,
+  BeforeUpdate,
+} from 'sequelize-typescript';
 
-@Table
+@Table({
+  paranoid: true,
+  tableName: 'users',
+})
 export class User extends Model<User> {
   @Column({
-    allowNull: false,
-    autoIncrement: true,
+    type: DataType.UUIDV4,
     primaryKey: true,
-    type: DataType.INTEGER,
+    allowNull: false,
+    defaultValue: DataType.UUIDV4,
   })
-  id!: string;
+  id: string;
+
+  @Column({
+    allowNull: true,
+    type: DataType.STRING,
+  })
+  firstName: string;
+
+  @Column({
+    allowNull: true,
+    type: DataType.STRING,
+  })
+  lastName: string;
+
+  @Column({
+    allowNull: true,
+    type: DataType.STRING,
+  })
+  userName: string;
 
   @Column({
     allowNull: false,
-    type: DataType.STRING,
     unique: true,
+    type: DataType.STRING,
   })
-  name!: string;
+  email: string;
+
+  @Column({
+    allowNull: true,
+    type: DataType.STRING,
+  })
+  password: string;
+
+  @BeforeCreate
+  @BeforeUpdate
+  static makeLowerCase(instance: User) {
+    // when creating new user or updating, lowercase the email
+    instance.email = instance.email.toLocaleLowerCase();
+  }
 }
 
 export default User;
