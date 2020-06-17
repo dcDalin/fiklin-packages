@@ -19,7 +19,12 @@ export default {
         const { firstName, lastName, email, password } = args;
 
         // validate input
-        const validate = validateSignUp(firstName, lastName, email, password);
+        const validate = await validateSignUp(
+          firstName,
+          lastName,
+          email,
+          password,
+        );
 
         // if validation fails i.e value of validate is not null
         if (validate) {
@@ -56,6 +61,10 @@ export default {
       } catch (error) {
         // tslint:disable-next-line: no-console
         console.log('Error: user.mutations.ts: ', error);
+        return {
+          status: FAILURE,
+          message: `Error: ${error}`,
+        };
       }
     },
   },

@@ -5,7 +5,10 @@ import {
   Table,
   BeforeCreate,
   BeforeUpdate,
+  AfterCreate,
 } from 'sequelize-typescript';
+import email from '../utils/email';
+import welcomeEmail from '../utils/email/templates/welcomeEmail';
 
 @Table({
   paranoid: true,
@@ -56,6 +59,21 @@ export class User extends Model<User> {
   static makeLowerCase(instance: User) {
     // when creating new user or updating, lowercase the email
     instance.email = instance.email.toLocaleLowerCase();
+  }
+
+  @AfterCreate
+  static sendConfirmationEmail(instance: User) {
+    const userEmail = instance.email;
+
+    const emailObject = {
+      from: 'support@fiklin.com',
+      to: userEmail,
+      subject: 'Welcome to Fiklin! Confirm Your Email',
+      text: 'Welcome to Fiklin',
+      html: welcomeEmail,
+    };
+
+    email(emailObject);
   }
 }
 
