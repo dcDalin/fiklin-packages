@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize-typescript';
 import env from '../env';
-import models from '../models';
+import models from './models';
 
 const DATABASE_URL = env('DATABASE_URL');
 

@@ -1,5 +1,6 @@
 import mail from '@sendgrid/mail';
 import env from '../../env';
+import logs from '../logs';
 
 const SENDGRID_API_KEY = env('SENDGRID_API_KEY');
 
@@ -17,9 +18,11 @@ const sendMail = (email: Email) => {
   mail
     .send(email)
     .then(() => {
-      console.log('Email sent');
+      return;
     })
-    .catch((error) => console.log('Error sending mail: ', error));
+    .catch((error) => {
+      logs(`Could not send email: ${error}`, 'email/index.ts');
+    });
 };
 
 export default sendMail;

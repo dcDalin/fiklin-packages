@@ -1,8 +1,9 @@
 import bcryptjs from 'bcryptjs';
-import userModel from '../../../models/user.model';
+import userModel from '../../../db/models/user.model';
 import validateSignUp from './validations/validateSignUp';
 import { SUCCESS, FAILURE } from '../../constants/status';
 import { generateToken } from '../../../utils/generateToken';
+import logs from '../../../utils/logs';
 
 interface SignUpArgs {
   firstName: string;
@@ -48,19 +49,20 @@ export default {
         // if user added to db
         if (res) {
           // generate token
+          // NOTE: Confirmation email sent from userModel
           const token = generateToken(res);
           return {
             status: SUCCESS,
             message: token,
           };
         }
+        logs('Could not sign up user', 'user.mutations.ts');
         return {
           status: FAILURE,
           message: 'Could not create account, please try again later.',
         };
       } catch (error) {
-        // tslint:disable-next-line: no-console
-        console.log('Error: user.mutations.ts: ', error);
+        logs('Sign up error caught', 'user.mutations.ts');
         return {
           status: FAILURE,
           message: `Error: ${error}`,

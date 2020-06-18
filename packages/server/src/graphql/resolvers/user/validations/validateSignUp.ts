@@ -1,4 +1,4 @@
-import userModel from '../../../../models/user.model';
+import userModel from '../../../../db/models/user.model';
 
 const validateSignUp = async (
   firstName: string,

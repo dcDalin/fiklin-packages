@@ -7,8 +7,8 @@ import {
   BeforeUpdate,
   AfterCreate,
 } from 'sequelize-typescript';
-import email from '../utils/email';
-import welcomeEmail from '../utils/email/templates/welcomeEmail';
+import email from '../../utils/email';
+import welcomeEmail from '../../utils/email/templates/welcomeEmail';
 
 @Table({
   paranoid: true,
