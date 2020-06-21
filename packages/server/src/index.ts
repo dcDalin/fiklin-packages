@@ -10,14 +10,16 @@ import typeDefs from './graphql/typeDefs';
 import resolvers from './graphql/resolvers';
 import env from './env';
 
+const app = express();
+
+const httpServer = createServer(app);
+
 // Env vars
 const PORT = env('PORT');
 const NODE_ENV = env('NODE_ENV');
 
 (async () => {
   try {
-    const app = express();
-
     app.disable('x-powered-by');
 
     app.use(
@@ -45,8 +47,6 @@ const NODE_ENV = env('NODE_ENV');
 
     server.applyMiddleware({ app, cors: false });
 
-    const httpServer = createServer(app);
-
     server.installSubscriptionHandlers(httpServer);
 
     // authenticate our sequelize
@@ -56,7 +56,8 @@ const NODE_ENV = env('NODE_ENV');
     await bootstrapClientApp(app);
 
     // Listen
-    httpServer.listen({ port: PORT }, () =>
+    httpServer.listen({ port: PORT }, () => {
+      httpServer.emit('ready');
       // tslint:disable-next-line: no-console
       console.log(
         `
@@ -66,8 +67,8 @@ const NODE_ENV = env('NODE_ENV');
         🚀 Server ready at http://localhost:${PORT}${server.graphqlPath} 🚀
         ################################################
         `,
-      ),
-    );
+      );
+    });
   } catch (error) {
     // tslint:disable-next-line: no-console
     console.error(error);
@@ -78,3 +79,5 @@ async function bootstrapClientApp(expressApp) {
   await client.prepare();
   expressApp.get('*', client.getRequestHandler());
 }
+
+export default httpServer;

@@ -11,10 +11,15 @@ module.exports.development = {
 
 module.exports.staging = {
   dialect: 'postgres',
-  url: process.env.DATABASE_URL,
+  url: process.env.DATABASE,
 };
 
 module.exports.production = {
+  dialect: 'postgres',
+  url: process.env.DATABASE_URL,
+};
+
+module.exports.test = {
   dialect: 'postgres',
   url: process.env.DATABASE_URL,
 };

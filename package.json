@@ -1,14 +1,15 @@
 {
   "name": "fiklin",
   "version": "1.0.0",
-  "description": "this is going to be da bomb",
+  "description": "Tours and tickets",
   "main": "index.js",
-  "author": "givehug",
+  "author": "mcdalinoluoch@gmail.com",
   "license": "ISC",
   "scripts": {
     "build": "yarn workspace @fiklin/client run build",
     "start": "yarn workspace @fiklin/server run start",
-    "dev": "export $(cat .env | xargs) && yarn workspace @fiklin/server run dev"
+    "dev": "export $(cat .env | xargs) && yarn workspace @fiklin/server run dev",
+    "test:server": "export $(cat .testing.env| xargs) && yarn workspace @fiklin/server run test"
   },
   "private": true,
   "workspaces": [
